@@ -96,7 +96,7 @@
   }
   var song = blankSong();
   try {
-    var sv = localStorage.getItem("maelzel.song");
+    var sv = localStorage.getItem("metron.song");
     if (sv){
       var ps = JSON.parse(sv);
       if (ps && ps.sections && ps.sections.length){
@@ -116,7 +116,7 @@
     }
   } catch(e){}
   function saveSong(){
-    try{ localStorage.setItem("maelzel.song", JSON.stringify(song)); }catch(e){}
+    try{ localStorage.setItem("metron.song", JSON.stringify(song)); }catch(e){}
     if (mode === "song") markFavs();
   }
 
@@ -511,13 +511,13 @@
     } catch(e){}
     return fallback;
   }
-  favs = loadBank("maelzel.favs", favs);
-  songFavs = loadBank("maelzel.songfavs", songFavs);
+  favs = loadBank("metron.favs", favs);
+  songFavs = loadBank("metron.songfavs", songFavs);
 
   function persistFavs(){
     try{
-      localStorage.setItem("maelzel.favs", JSON.stringify(favs));
-      localStorage.setItem("maelzel.songfavs", JSON.stringify(songFavs));
+      localStorage.setItem("metron.favs", JSON.stringify(favs));
+      localStorage.setItem("metron.songfavs", JSON.stringify(songFavs));
     }catch(e){}
   }
 
@@ -671,7 +671,7 @@
   $("themeBtn").addEventListener("click", function(){
     var next = themeNow() === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
-    try { localStorage.setItem("maelzel.theme", next); } catch(e){}
+    try { localStorage.setItem("metron.theme", next); } catch(e){}
     paintTheme();
   });
   if (window.matchMedia){
@@ -1056,6 +1056,14 @@
   // outright where the browser supports it. Failing is harmless — we just ask.
   if (navigator.storage && navigator.storage.persist)
     navigator.storage.persist().catch(function(){});
+
+  // One-off cleanup of the pre-rename keys so they don't sit in storage forever.
+  // Safe to delete this block once everyone has opened the app at least once.
+  try {
+    ["theme","favs","songfavs","song"].forEach(function(k){
+      localStorage.removeItem("maelzel." + k);
+    });
+  } catch(e){}
 
   // ---------- boot ----------
   $("loopBtn").setAttribute("aria-checked", String(song.loop));

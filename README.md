@@ -84,10 +84,10 @@ git revert <커밋해시>     # 특정 변경만 되돌리기
 
 브라우저 로컬 저장소(`localStorage`)에 남습니다. 앱을 껐다 켜도 그대로 복원됩니다.
 
-- `maelzel.theme` — 라이트/다크 선택
-- `maelzel.favs` — 템포 즐겨찾기 6칸
-- `maelzel.songfavs` — 곡 즐겨찾기 6칸
-- `maelzel.song` — 편집 중인 곡
+- `metron.theme` — 라이트/다크 선택
+- `metron.favs` — 템포 즐겨찾기 6칸
+- `metron.songfavs` — 곡 즐겨찾기 6칸
+- `metron.song` — 편집 중인 곡
 
 **iOS 주의.** 사파리는 어떤 사이트를 **7일 동안 안 열면** 그 사이트의 저장 데이터를 지웁니다.
 홈 화면에 추가한 앱은 사파리와 별도의 사용 일수 카운터를 가지며, 앱을 열 때마다 초기화됩니다.
