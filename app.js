@@ -1039,6 +1039,12 @@
   }
 
 
+  // Safari wipes script storage after 7 days of not using a site. A home screen app
+  // has its own counter that using it resets, and persistent mode exempts the origin
+  // outright where the browser supports it. Failing is harmless — we just ask.
+  if (navigator.storage && navigator.storage.persist)
+    navigator.storage.persist().catch(function(){});
+
   // ---------- boot ----------
   $("loopBtn").setAttribute("aria-checked", String(song.loop));
   $("songTitle").value = song.title || "";
