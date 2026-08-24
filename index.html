@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maelzel</title>
+<meta name="description" content="피아노 연습용 메트로놈">
+
+<!-- theme is stamped before the stylesheet loads so there is no flash of the wrong mode -->
+<script>try{var t=localStorage.getItem("maelzel.theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+
+<meta name="theme-color" content="#E7EEFA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#04060B" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Maelzel">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="toprow">
+    <div class="seg glass" role="group" aria-label="모드">
+      <button id="modeBasic" aria-pressed="true">연습</button>
+      <button id="modeSong"  aria-pressed="false">곡</button>
+    </div>
+    <button class="iconbtn glass" id="themeBtn" aria-label="다크모드로 전환">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path id="themeIcon" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    </button>
+    <button class="star glass" id="starBtn" aria-pressed="false" aria-label="즐겨찾기에 저장">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    </button>
+  </div>
+
+  <div class="hero">
+    <div class="leds" id="leds" role="group" aria-label="마디 강세"></div>
+
+    <div class="readout">
+      <div class="bpm-line">
+        <button class="nudge soft" id="m1" aria-label="1 감소">
+          <svg viewBox="0 0 19 19" aria-hidden="true"><path d="M3.5 9.5h12"/></svg>
+        </button>
+        <input id="bpmInput" type="text" inputmode="numeric" pattern="[0-9]*"
+               maxlength="3" value="96" aria-label="템포 BPM">
+        <button class="nudge soft" id="p1" aria-label="1 증가">
+          <svg viewBox="0 0 19 19" aria-hidden="true"><path d="M9.5 3.5v12M3.5 9.5h12"/></svg>
+        </button>
+      </div>
+      <div class="caption" id="caption">BPM · Andante</div>
+    </div>
+
+    <div class="tempo-row" id="tempoRow">
+      <div class="wheel-wrap">
+        <div class="wheel" id="wheel" role="slider" tabindex="0"
+             aria-label="템포 휠" aria-valuemin="20" aria-valuemax="300" aria-valuenow="96"></div>
+        <div class="wheel-mark"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="picks glass" id="picksRow">
+    <div class="pick">
+      <span class="big" id="meterVal">4/4</span>
+      <select id="meterSel" aria-label="박자표"></select>
+    </div>
+    <div class="pick">
+      <span class="big note" id="subVal" role="img" aria-label="4분음표"></span>
+      <select id="subSel" aria-label="분할"></select>
+    </div>
+    <button class="pick" id="tapBtn">
+      <span class="big ico">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"/></svg>
+      </span>
+    </button>
+  </div>
+
+  <div class="favwrap">
+    <div class="favs" id="favs" role="group" aria-label="즐겨찾기"></div>
+    <div class="favhint" id="favHint">별표를 눌러 현재 템포를 저장하세요</div>
+  </div>
+
+  <!-- ============ 연습 ============ -->
+  <div class="pane" id="basicPane">
+    <div class="chord glass">
+      <div class="chord-in" id="chordIn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="chordQ" type="text" autocomplete="off" autocapitalize="off"
+               spellcheck="false" placeholder="코드 검색" aria-label="코드 검색">
+        <button class="chord-clear" id="chordClear" aria-label="지우기">&times;</button>
+      </div>
+      <div class="chord-sug" id="chordSug"></div>
+      <div class="chord-out" id="chordOut"></div>
+    </div>
+
+  </div>
+
+  <!-- ============ 곡 ============ -->
+  <div class="pane" id="songPane" hidden>
+    <div class="songhead">
+      <div class="songrow">
+        <input id="songTitle" placeholder="곡 이름" maxlength="20" aria-label="곡 이름">
+        <button class="hbtn" id="loopBtn" role="switch" aria-checked="true" aria-label="반복">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+        </button>
+        <button class="hbtn" id="addSec" aria-label="구간 추가">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </button>
+      </div>
+      <div class="total" id="totalTime">—</div>
+    </div>
+    <div class="sec-list" id="secList"></div>  </div>
+
+
+  <div class="playwrap">
+    <button class="play" id="playBtn" aria-label="시작">
+      <span class="badge"><svg viewBox="0 0 13 15" aria-hidden="true"><path id="playPath" d="M1.5 1 L12 7.5 L1.5 14 Z"/></svg></span>
+      <span id="playLabel" class="sr">시작</span>
+    </button>
+  </div>
+
+</div>
+
+<script src="chords.js"></script>
+<script src="app.js"></script>
+<script>
+  if ("serviceWorker" in navigator)
+    addEventListener("load", function(){
+      navigator.serviceWorker.register("sw.js").catch(function(){});
+    });
+</script>
+</body>
+</html>

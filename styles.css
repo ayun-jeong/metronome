@@ -1,0 +1,461 @@
+@font-face{
+    font-family:'Pretendard';
+    src:url('assets/pretendard-subset.woff2') format('woff2');
+    font-weight:45 930;
+    font-style:normal;
+    font-display:swap;
+  }
+
+  /* ============ tokens — light is the base ============ */
+  :root{
+    --bg-base:#E7EEFA;
+    --blob-a:rgba(88,146,255,.72);
+    --blob-b:rgba(118,214,255,.62);
+    --blob-c:rgba(166,140,255,.54);
+    --blob-d:rgba(110,192,255,.58);
+
+    --glass:rgba(255,255,255,.52);
+    --glass-brd:rgba(255,255,255,.72);
+    --glass-hi:rgba(255,255,255,.60);
+    --glass-sh:0 14px 40px rgba(30,56,110,.16), 0 2px 10px rgba(30,56,110,.08);
+    --list-sh:0 4px 12px rgba(30,56,110,.11);
+
+    --fill:rgba(255,255,255,.44);
+    --fill-brd:rgba(255,255,255,.64);
+    --fill-press:rgba(255,255,255,.82);
+
+    --label:#0C1120;
+    --label-2:rgba(28,42,74,.62);
+    --label-3:rgba(28,42,74,.32);
+    --sep:rgba(28,42,74,.13);
+
+    --bar:rgba(80,100,146,.32);
+    --bar-off:rgba(86,106,150,.11);
+
+    --tint:#0A5AC8;
+    --tint-grad:linear-gradient(160deg,#3D93FF 0%,#1A6FEE 55%,#0A5AC8 100%);
+    --tint-glow:rgba(26,111,238,.34);
+    --tint-soft:rgba(26,111,238,.13);
+    --tint-brd:rgba(26,111,238,.40);
+
+    --acc-grad:linear-gradient(160deg,#A6A4F8 0%,#6F6DEE 55%,#5250DA 100%);
+    --acc-glow:rgba(111,109,238,.32);
+
+    --on-tint:#FFFFFF;
+    --red:#E8342A;
+    --green:#34C759;
+    --knob:#FFFFFF;
+    --knob-sh:0 3px 10px rgba(38,64,116,.20),0 1px 2px rgba(38,64,116,.10);
+    --track:rgba(86,106,150,.22);
+    --soft-sh:0 3px 12px rgba(38,64,116,.07);
+    --icon:#5E6C88;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg-base:#04060B;
+      --blob-a:rgba(42,94,214,.62);
+      --blob-b:rgba(30,128,190,.48);
+      --blob-c:rgba(96,78,196,.48);
+      --blob-d:rgba(28,104,178,.42);
+
+      --glass:rgba(22,27,38,.50);
+      --glass-brd:rgba(255,255,255,.14);
+      --glass-hi:rgba(255,255,255,.12);
+      --glass-sh:0 14px 40px rgba(0,0,0,.62), 0 2px 10px rgba(0,0,0,.46);
+      --list-sh:0 4px 12px rgba(0,0,0,.48);
+
+      --fill:rgba(255,255,255,.10);
+      --fill-brd:rgba(255,255,255,.14);
+      --fill-press:rgba(255,255,255,.20);
+
+      --label:#F0F3F9;
+      --label-2:rgba(226,233,245,.62);
+      --label-3:rgba(226,233,245,.34);
+      --sep:rgba(255,255,255,.10);
+
+      --bar:rgba(226,233,245,.30);
+      --bar-off:rgba(226,233,245,.09);
+
+      --tint:#4FA3FF;
+      --tint-grad:linear-gradient(160deg,#3E97FF 0%,#1E7CF5 55%,#0A66D8 100%);
+      --tint-glow:rgba(62,151,255,.36);
+      --tint-soft:rgba(62,151,255,.18);
+      --tint-brd:rgba(62,151,255,.46);
+
+      --acc-grad:linear-gradient(160deg,#B6B4FF 0%,#8583F5 55%,#6462E4 100%);
+      --acc-glow:rgba(133,131,245,.34);
+
+      --on-tint:#FFFFFF;
+      --red:#FF453A;
+      --green:#30D158;
+      --knob:rgba(255,255,255,.20);
+      --knob-sh:0 3px 10px rgba(0,0,0,.5),0 1px 2px rgba(0,0,0,.4);
+      --track:rgba(226,233,245,.16);
+      --soft-sh:0 3px 12px rgba(0,0,0,.34);
+      --icon:#8A98B2;
+    }
+  }
+  :root[data-theme="dark"]{
+        --bg-base:#04060B;
+    --blob-a:rgba(42,94,214,.62);
+    --blob-b:rgba(30,128,190,.48);
+    --blob-c:rgba(96,78,196,.48);
+    --blob-d:rgba(28,104,178,.42);
+
+    --glass:rgba(22,27,38,.50);
+    --glass-brd:rgba(255,255,255,.14);
+    --glass-hi:rgba(255,255,255,.12);
+    --glass-sh:0 14px 40px rgba(0,0,0,.62), 0 2px 10px rgba(0,0,0,.46);
+    --list-sh:0 4px 12px rgba(0,0,0,.48);
+
+    --fill:rgba(255,255,255,.10);
+    --fill-brd:rgba(255,255,255,.14);
+    --fill-press:rgba(255,255,255,.20);
+
+    --label:#F0F3F9;
+    --label-2:rgba(226,233,245,.62);
+    --label-3:rgba(226,233,245,.34);
+    --sep:rgba(255,255,255,.10);
+
+    --bar:rgba(226,233,245,.30);
+    --bar-off:rgba(226,233,245,.09);
+
+    --tint:#4FA3FF;
+    --tint-grad:linear-gradient(160deg,#3E97FF 0%,#1E7CF5 55%,#0A66D8 100%);
+    --tint-glow:rgba(62,151,255,.36);
+    --tint-soft:rgba(62,151,255,.18);
+    --tint-brd:rgba(62,151,255,.46);
+
+    --acc-grad:linear-gradient(160deg,#B6B4FF 0%,#8583F5 55%,#6462E4 100%);
+    --acc-glow:rgba(133,131,245,.34);
+
+    --on-tint:#FFFFFF;
+    --red:#FF453A;
+    --green:#30D158;
+    --knob:rgba(255,255,255,.20);
+    --knob-sh:0 3px 10px rgba(0,0,0,.5),0 1px 2px rgba(0,0,0,.4);
+    --track:rgba(226,233,245,.16);
+    --soft-sh:0 3px 12px rgba(0,0,0,.34);
+    --icon:#8A98B2;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg-base);color:var(--label);
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,
+      "Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+    overscroll-behavior:none;display:flex;justify-content:center;
+    font-size:17px;line-height:1.32;letter-spacing:-.01em;
+  }
+  /* discrete colour blobs, heavily blurred — glass needs something to reveal */
+  body::before{
+    content:"";position:fixed;inset:-15%;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(34% 26% at 16% 10%, var(--blob-a), transparent 64%),
+      radial-gradient(30% 24% at 86% 6%,  var(--blob-b), transparent 64%),
+      radial-gradient(38% 28% at 80% 58%, var(--blob-c), transparent 66%),
+      radial-gradient(32% 26% at 8% 80%,  var(--blob-d), transparent 64%),
+      radial-gradient(30% 24% at 50% 108%, var(--blob-b), transparent 64%);
+    filter:blur(46px);
+  }
+
+  .app{
+    position:relative;z-index:1;
+    width:100%;max-width:430px;height:100dvh;height:100vh;
+    display:flex;flex-direction:column;gap:clamp(5px,1vh,12px);
+    padding:clamp(6px,1.1vh,13px) 16px calc(clamp(10px,1.6vh,16px) + env(safe-area-inset-bottom));
+    overflow:hidden;
+  }
+  .app > * { flex:0 0 auto }
+
+  button{font-family:inherit;border:0;cursor:pointer;color:var(--label);
+    touch-action:manipulation;user-select:none;-webkit-user-select:none;padding:0;
+    letter-spacing:inherit}
+  button:focus-visible{outline:2.5px solid var(--tint);outline-offset:3px}
+
+  .glass{
+    background:var(--glass);
+    border:1px solid var(--glass-brd);
+    box-shadow:var(--glass-sh), inset 0 1px 0 var(--glass-hi);
+    -webkit-backdrop-filter:blur(42px) saturate(200%);
+    backdrop-filter:blur(42px) saturate(200%);
+  }
+  .soft{
+    background:var(--fill);border:1px solid var(--fill-brd);
+    box-shadow:var(--soft-sh), inset 0 1px 0 var(--glass-hi);
+    -webkit-backdrop-filter:blur(24px) saturate(200%);backdrop-filter:blur(24px) saturate(200%);
+  }
+
+  /* ============ top row ============ */
+  .toprow{display:flex;gap:8px}
+  .seg{display:flex;gap:3px;border-radius:999px;padding:4px;flex:1}
+  .seg button{flex:1;min-height:36px;border-radius:999px;background:transparent;
+    font-size:14px;font-weight:600;color:var(--label-2);
+    transition:background .18s,color .18s,box-shadow .18s}
+  .seg button[aria-pressed="true"]{background:var(--knob);color:var(--label);box-shadow:var(--knob-sh)}
+
+  .iconbtn{width:44px;height:44px;flex:0 0 auto;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;transition:transform .14s}
+  .iconbtn:active{transform:scale(.9)}
+  .iconbtn svg{width:20px;height:20px;fill:none;stroke:var(--icon);stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round}
+  .star{width:44px;height:44px;flex:0 0 auto;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;transition:transform .14s}
+  .star:active{transform:scale(.9)}
+  .star svg{width:22px;height:22px;fill:none;stroke:var(--label-3);stroke-width:1.7;
+    stroke-linejoin:round;transition:fill .18s,stroke .18s}
+  .star[aria-pressed="true"] svg{fill:var(--tint);stroke:var(--tint)}
+
+  /* ============ hero ============ */
+  /* no panel — the readout sits straight on the gradient */
+  .hero{display:flex;flex-direction:column;gap:clamp(6px,1.2vh,14px);
+    padding:clamp(4px,2.4vh,30px) 2px clamp(2px,.8vh,8px)}
+
+  /* beat bars — height encodes the accent, fill says which beat is sounding now */
+  .leds{display:flex;gap:6px;align-items:flex-end;height:clamp(34px,7vh,80px)}
+  .led{flex:1 1 0;min-width:0;height:100%;background:transparent;
+    display:flex;align-items:flex-end}
+  .led i{display:block;width:100%;border-radius:6px;background:var(--bar);
+    transform-origin:bottom;
+    transition:height .16s cubic-bezier(.32,.72,0,1),background .07s,
+               transform .07s,box-shadow .07s}
+  .led[data-acc="3"] i{height:100%}
+  .led[data-acc="2"] i{height:62%}
+  .led[data-acc="1"] i{height:36%}
+  .led[data-acc="0"] i{height:11%;background:var(--bar-off)}
+  .led.on i{background:var(--tint-grad);transform:scaleY(1.05);
+    box-shadow:0 4px 18px var(--tint-glow)}
+  .led.on[data-acc="3"] i{background:var(--acc-grad);box-shadow:0 4px 18px var(--acc-glow)}
+  .led:focus-visible{outline:2.5px solid var(--tint);outline-offset:3px;border-radius:8px}
+
+  /* ============ readout with flanking steppers ============ */
+  .readout{display:flex;flex-direction:column;align-items:center}
+  .bpm-line{display:flex;align-items:center;justify-content:center;width:100%;
+    gap:clamp(4px,2vw,14px)}
+  .nudge{width:clamp(44px,12vw,54px);height:clamp(44px,12vw,54px);border-radius:999px;
+    flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    transition:background .12s,transform .1s}
+  .nudge:active{background:var(--fill-press);transform:scale(.9)}
+  .nudge svg{width:19px;height:19px;fill:none;stroke:var(--label);
+    stroke-width:2.4;stroke-linecap:round}
+  #bpmInput{
+    font-family:inherit;font-size:clamp(44px,11vh,110px);font-weight:300;line-height:1;
+    letter-spacing:-.05em;font-variant-numeric:tabular-nums;
+    color:var(--label);background:transparent;border:0;outline:0;
+    width:3ch;text-align:center;padding:0;margin:0;caret-color:var(--tint);flex:0 0 auto}
+  #bpmInput:focus{color:var(--tint)}
+  .caption{font-size:15px;color:var(--label-2);margin-top:3px;text-align:center}
+
+  /* ============ tempo wheel + tap ============ */
+  .tempo-row{display:flex;gap:9px;align-items:stretch;
+    height:clamp(34px,4.6vh,44px)}
+  .tempo-row[hidden]{display:none}
+  .wheel-wrap{position:relative;flex:1 1 auto;min-width:0}
+  .wheel{position:absolute;inset:0;cursor:grab;touch-action:none;
+    user-select:none;-webkit-user-select:none;
+    background-image:
+      repeating-linear-gradient(90deg,var(--label-2) 0 1.5px,transparent 1.5px 72px),
+      repeating-linear-gradient(90deg,var(--label-3) 0 1.5px,transparent 1.5px 12px);
+    background-size:100% 46%,100% 24%;background-repeat:repeat-x;background-position:0 50%,0 50%;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent)}
+  .wheel.grabbing{cursor:grabbing}
+  .wheel-mark{position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-1.5px;
+    background:var(--tint-grad);border-radius:2px;pointer-events:none;
+    box-shadow:0 0 12px var(--tint-glow)}
+
+  /* ============ favourites ============ */
+  .favwrap{display:flex;flex-direction:column;gap:5px}
+  .favhint{font-size:11.5px;color:var(--label-3);text-align:center;min-height:15px;
+    transition:color .2s}
+  .favhint.say{color:var(--tint)}
+  .favs{display:flex;gap:6px}
+  .fav{flex:1 1 0;min-width:0;min-height:clamp(40px,5.8vh,54px);border-radius:15px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:0 3px;overflow:hidden;
+    transition:background .16s,transform .1s,border-color .16s,color .16s}
+  .fav:active{transform:scale(.94)}
+  .fav .n{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+  .fav .t{font-size:12px;font-weight:600;max-width:100%;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .fav .m{font-size:10.5px;color:var(--label-2);font-variant-numeric:tabular-nums;margin-top:-1px}
+  .fav[aria-pressed="true"]{background:var(--tint-soft);border-color:var(--tint-brd);
+    color:var(--tint)}
+  .fav[aria-pressed="true"] .m{color:var(--tint);opacity:.8}
+  .fav.empty{background:var(--bar-off);border:1px dashed var(--sep);box-shadow:none}
+  .fav.empty svg{width:16px;height:16px;fill:none;stroke:var(--label-3);stroke-width:1.6;
+    stroke-linejoin:round;opacity:.5}
+  @keyframes favsaved{0%{transform:scale(1)}42%{transform:scale(1.12)}100%{transform:scale(1)}}
+  .fav.flash{animation:favsaved .34s cubic-bezier(.32,.72,0,1)}
+
+  /* ============ meter / subdivision pickers ============ */
+  .picks{display:flex;gap:0;border-radius:16px;overflow:hidden}
+  .picks[hidden]{display:none}
+  .pick{flex:1 1 0;min-width:0;position:relative;
+    min-height:clamp(42px,6vh,56px);padding:5px 8px;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;border:0;border-radius:0;
+    transition:background .16s,color .16s}
+  .pick + .pick{box-shadow:inset 1px 0 0 var(--sep)}
+  .pick:active{background:var(--fill-press)}
+  .pick:active{transform:scale(.97)}
+  .pick .big{font-size:clamp(19px,5.2vw,24px);font-weight:600;letter-spacing:-.035em;
+    font-variant-numeric:tabular-nums;max-width:100%;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .pick .big.note{display:flex;align-items:center;justify-content:center;
+    min-height:clamp(24px,6vw,30px)}
+  .pick .big.note svg{height:clamp(24px,6vw,30px);width:auto;display:block;
+    fill:currentColor;max-width:100%}
+  .pick .big.ico{display:flex;align-items:center;justify-content:center;
+    min-height:clamp(24px,6vw,30px)}
+  .pick .big.ico svg{width:clamp(21px,5.4vw,26px);height:auto;display:block;
+    fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .pick.armed{background:var(--tint-soft);color:var(--tint)}
+  .pick select{position:absolute;inset:0;width:100%;height:100%;opacity:0;
+    -webkit-appearance:none;appearance:none;border:0;background:transparent;
+    font-size:16px;cursor:pointer}
+  .pick select:focus-visible{opacity:.001;outline:2.5px solid var(--tint);outline-offset:-4px}
+
+  /* ============ chord lookup ============ */
+  /* the card grows into whatever the practice pane has left over */
+  .pane > .chord{margin-top:auto}
+  .chord{border-radius:18px;padding:8px 11px;
+    display:flex;flex-direction:column;gap:6px}
+  .chord-out{display:flex;flex-direction:column;align-items:center;gap:5px;padding-top:3px}
+  .chord-sym{font-size:clamp(14px,3.8vw,16px);font-weight:700;letter-spacing:-.02em}
+  .cnotes{display:flex;gap:5px;justify-content:center;width:100%;min-width:0}
+  .cn{flex:0 1 auto;min-width:0;display:flex;flex-direction:column;align-items:center;gap:0;
+    background:var(--fill);border:1px solid var(--fill-brd);border-radius:10px;
+    padding:4px 7px}
+  .cn b{font-size:clamp(14px,4vw,18px);font-weight:600;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .cn i{font-size:10.5px;font-style:normal;font-weight:700;color:var(--tint);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .chord-out:empty{display:none}
+  .chord-msg{font-size:13px;color:var(--label-3);text-align:center;padding:0 8px;line-height:1.5}
+
+  .chord-sug{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;
+    -ms-overflow-style:none;flex:0 0 auto;min-height:0}
+  .chord-sug::-webkit-scrollbar{display:none}
+  .chord-sug:empty{display:none}
+  .chord-sug button{flex:0 0 auto;padding:5px 10px;border-radius:8px;background:var(--fill);
+    border:1px solid var(--fill-brd);font-size:12.5px;font-weight:600;color:var(--label-2);
+    transition:background .1s}
+  .chord-sug button:active{background:var(--fill-press)}
+
+  .chord-in{flex:0 0 auto;display:flex;align-items:center;gap:8px;background:var(--fill);
+    border:1px solid var(--fill-brd);border-radius:12px;padding:0 10px;min-height:40px}
+  .chord-in svg{width:16px;height:16px;flex:0 0 auto;fill:none;stroke:var(--label-3);
+    stroke-width:2;stroke-linecap:round}
+  .chord-in input{flex:1 1 auto;min-width:0;font-family:inherit;font-size:16px;font-weight:600;
+    color:var(--label);background:transparent;border:0;outline:0;padding:0;
+    letter-spacing:inherit}
+  .chord-in input::placeholder{color:var(--label-3);font-weight:500}
+  .chord-clear{width:24px;height:24px;flex:0 0 auto;border-radius:50%;background:transparent;
+    display:none;align-items:center;justify-content:center;font-size:16px;color:var(--label-3)}
+  .chord-in.filled .chord-clear{display:flex}
+
+
+  /* ============ panes ============ */
+  /* short screens scroll the middle; the header and the play button stay put */
+  /* No overflow here on purpose. A scroll box clips its children's shadows, which
+     left a hard-edged band around the search card, and the negative margin used to
+     hide that band pushed the box over the play button. Everything fits down to
+     375x667, so the pane simply lets the shadow breathe. */
+  .pane{display:flex;flex-direction:column;min-height:0;flex:1 1 auto;
+    gap:clamp(7px,1.2vh,12px)}
+  /* only the section list flexes; everything else keeps its full height */
+  .pane > *{flex:0 0 auto}
+  .pane[hidden]{display:none}
+
+  /* ============ song ============ */
+  .songhead{display:flex;flex-direction:column;gap:2px;padding:0 4px}
+  .songrow{display:flex;align-items:center;gap:8px}
+  .songrow input{flex:1 1 auto;min-width:0;font-family:inherit;font-size:19px;font-weight:700;
+    color:var(--label);background:transparent;border:0;outline:0;padding:0;
+    letter-spacing:-.03em}
+  .songrow input::placeholder{color:var(--label-3);font-weight:600}
+  .hbtn{width:36px;height:36px;flex:0 0 auto;border-radius:50%;
+    background:var(--fill);border:1px solid var(--fill-brd);
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s,border-color .15s,transform .1s}
+  .hbtn:active{transform:scale(.9)}
+  .hbtn svg{width:18px;height:18px;fill:none;stroke:var(--icon);stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round}
+  .hbtn[aria-checked="true"]{background:var(--tint-soft);border-color:var(--tint-brd)}
+  .hbtn[aria-checked="true"] svg{stroke:var(--tint)}
+  /* one line, always */
+  .songhead .total{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    font-size:11.5px;color:var(--label-2);font-variant-numeric:tabular-nums;padding-left:1px}
+
+
+  .pane > .sec-list{flex:1 1 auto;min-height:0}
+  .sec-list{min-height:0;overflow-y:auto;display:flex;flex-direction:column;
+    gap:9px;-webkit-overflow-scrolling:touch;
+    margin:0 -16px;padding:2px 16px 18px}
+  .sec{border-radius:15px;padding:8px 10px;position:relative;overflow:hidden;
+    display:flex;align-items:center;gap:7px;transition:box-shadow .16s;
+    box-shadow:var(--list-sh),inset 0 1px 0 var(--glass-hi)}
+  .sec.playing{box-shadow:var(--list-sh),inset 0 0 0 2px var(--tint)}
+  .sec-del{width:23px;height:23px;flex:0 0 auto;display:flex;align-items:center;
+    justify-content:center;background:transparent}
+  .sec-del svg{width:21px;height:21px;display:block}
+  .sec-name{flex:1 1 auto;min-width:38px;font-family:inherit;font-size:15px;font-weight:600;
+    color:var(--label);background:transparent;border:0;outline:0;padding:2px 0;
+    letter-spacing:inherit;border-bottom:1px solid transparent}
+  .sec-name:focus{border-bottom-color:var(--tint)}
+  .fld{flex:0 0 auto;display:flex;align-items:baseline;gap:3px;background:var(--fill);
+    border:1px solid var(--fill-brd);border-radius:9px;padding:6px 8px;min-height:34px}
+  .fld.bars{width:58px}
+  .fld.bpm{width:69px}
+  .fld input{width:100%;min-width:0;font-family:inherit;font-size:15px;font-weight:500;
+    font-variant-numeric:tabular-nums;color:var(--label);background:transparent;
+    border:0;outline:0;padding:0;text-align:right}
+  .fld input:focus{color:var(--tint)}
+  .fld span{font-size:9.5px;color:var(--label-3);flex:0 0 auto}
+  .fld.sel{width:62px;padding:0;position:relative}
+  .fld.sel select{appearance:none;-webkit-appearance:none;width:100%;height:100%;min-height:34px;
+    font-family:inherit;font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;
+    color:var(--label);background:transparent;border:0;outline:0;padding:0 16px 0 8px;cursor:pointer}
+  .fld.sel::after{content:"";position:absolute;right:7px;top:50%;width:4.5px;height:4.5px;
+    border-right:1.8px solid var(--label-3);border-bottom:1.8px solid var(--label-3);
+    transform:rotate(45deg) translateY(-3.5px);pointer-events:none}
+  .sec-prog{position:absolute;left:0;right:0;bottom:0;height:3px;opacity:0}
+  .sec.playing .sec-prog{opacity:1}
+  .sec-prog i{display:block;height:100%;width:0;background:var(--tint-grad);
+    transition:width .12s linear}
+
+
+  /* ============ prominent button ============ */
+  .playwrap{display:flex;justify-content:center;flex:0 0 auto;padding-top:2px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);
+    white-space:nowrap}
+  .play{width:clamp(64px,min(19vw,10.5vh),98px);height:clamp(64px,min(19vw,10.5vh),98px);
+    border-radius:50%;padding:0;
+    background:var(--tint-grad);color:var(--on-tint);
+    display:flex;align-items:center;justify-content:center;gap:0;
+    box-shadow:0 12px 30px var(--tint-glow),0 2px 6px rgba(10,60,140,.20),
+      inset 0 1.5px 0 rgba(255,255,255,.38);
+    transition:transform .12s,box-shadow .18s,background .2s,color .2s}
+  .play:active{transform:scale(.975);
+    box-shadow:0 5px 16px var(--tint-glow),inset 0 1.5px 0 rgba(255,255,255,.30)}
+  .play .badge{display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  /* nudge the triangle so it sits optically centred in the circle */
+  .play svg{width:clamp(22px,min(6.4vw,3.6vh),32px);height:auto;display:block;fill:currentColor;
+    margin-left:11%}
+  .play.running svg{margin-left:0}
+  /* running: drop back to neutral glass so the blue isn't shouting while you play */
+  .play.running{background:var(--glass);color:var(--label);
+    -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+    box-shadow:0 6px 20px rgba(38,64,116,.12),inset 0 0 0 1.5px var(--glass-brd),
+      inset 0 1.5px 0 rgba(255,255,255,.55)}
+
+
+
+  /* Below this the hint line is the cheapest thing to drop; the star button and the
+     empty slots already say what they do. */
+  @media (max-height: 700px){ .favhint{display:none} }
+
+  @media (prefers-reduced-motion: reduce){ *{transition-duration:.01ms !important} }
