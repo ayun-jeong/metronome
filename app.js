@@ -123,7 +123,11 @@
   // ---------- audio ----------
   var ctx=null, bus=null, limiter=null, noiseBuf=null, timerId=null;
   var nextNoteTime=0, queue=[], pendingEnd=0;
-  var LOOKAHEAD_MS=25, SCHEDULE_AHEAD=0.10;
+  // Booking window. Small while you can see the app, so tempo changes are heard at
+  // once. Browsers throttle timers in hidden pages to about 1 Hz, so we book much
+  // further out there — otherwise beats come due between wake-ups and are missed.
+  var LOOKAHEAD_MS=25, AHEAD_FG=0.10, AHEAD_BG=1.60;
+  var scheduleAhead = AHEAD_FG;
   var wakeLock=null;
   var cursor = { sec:0, bar:0, beat:0, sub:0 };
   var displaySec = 0, ledSig = "";
@@ -246,8 +250,13 @@
   // The scheduler never makes a sound itself. It only books notes with the audio
   // clock far enough ahead that timer jitter can never reach them.
   function scheduler(){
-    while (!pendingEnd && nextNoteTime < ctx.currentTime + SCHEDULE_AHEAD){
-      scheduleTick(nextNoteTime);
+    var now = ctx.currentTime;
+    while (!pendingEnd && nextNoteTime < now + scheduleAhead){
+      // If the timer was throttled we may be behind. Booking an overdue note makes the
+      // audio thread fire it at once, so a whole run of them lands on the same instant
+      // and stacks into one loud thud — which is what "only the strong beat sounds"
+      // actually was. Step over those instead; the grid and bar position stay correct.
+      if (nextNoteTime >= now - 0.005) scheduleTick(nextNoteTime);
       nextNoteTime += stepNow();
       if (!advanceCursor()) pendingEnd = nextNoteTime;
     }
@@ -301,7 +310,9 @@
   }
   function releaseWakeLock(){ if (wakeLock){ try{ wakeLock.release(); }catch(e){} wakeLock = null; } }
   document.addEventListener("visibilitychange", function(){
-    if (document.visibilityState === "visible" && state.running) requestWakeLock();
+    var hidden = document.visibilityState === "hidden";
+    scheduleAhead = hidden ? AHEAD_BG : AHEAD_FG;
+    if (!hidden && state.running) requestWakeLock();
   });
 
   // ---------- tempo ----------
@@ -1016,6 +1027,7 @@
     while (queue.length && queue[0].time <= t){
       var n = queue.shift();
       if (n.sub !== 0) continue;
+      if (t - n.time > 0.15) continue;   // stale after a spell in the background
       if (mode === "song" && n.sec !== displaySec){ displaySec = n.sec; ledSig = ""; renderLeds(); }
       setActiveBeat(n.beat);
       if (mode === "song") paintSongProgress(n.sec, n.bar);
