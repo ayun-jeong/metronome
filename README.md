@@ -30,19 +30,27 @@ ipconfig getifaddr en0
 
 ## 배포
 
-정적 호스팅이면 어디든 됩니다. 폴더째 올리면 끝입니다.
+**https://ayun-jeong.github.io/metronome/**
+
+GitHub Pages로 `main` 브랜치에서 바로 서빙됩니다. 빌드 단계가 없으니 푸시가 곧 배포입니다.
 
 ```sh
-# Vercel
-npx vercel --prod
-
-# 또는 Netlify
-npx netlify deploy --prod --dir .
+git add -A
+git commit -m "무엇을 고쳤는지"
+git push
 ```
 
-GitHub Pages도 됩니다. 저장소를 만들고 이 폴더를 푸시한 뒤 Pages를 켜면 됩니다.
+1분 안쪽으로 반영됩니다.
 
-배포 후 아이폰 사파리에서 열어 **공유 → 홈 화면에 추가**하면 앱처럼 전체 화면으로 실행되고, 오프라인에서도 켜집니다.
+아이폰 사파리에서 위 주소를 열고 **공유 → 홈 화면에 추가**하면 앱처럼 전체 화면으로 실행되고,
+오프라인에서도 켜집니다.
+
+### 되돌리기
+
+```sh
+git log --oneline        # 기록 보기
+git revert <커밋해시>     # 특정 변경만 되돌리기
+```
 
 ## 파일
 
