@@ -1,6 +1,6 @@
 {
-  "name": "Maelzel",
-  "short_name": "Maelzel",
+  "name": "Metron",
+  "short_name": "Metron",
   "description": "피아노 연습용 메트로놈",
   "start_url": "./",
   "scope": "./",

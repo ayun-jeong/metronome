@@ -6,7 +6,7 @@ while lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; do
   PORT=$((PORT+1))
 done
 echo ""
-echo "  Maelzel  →  http://localhost:$PORT"
+echo "  Metron  →  http://localhost:$PORT"
 echo "  끄려면 Control-C"
 echo ""
 ( sleep 1; open "http://localhost:$PORT" ) &
