@@ -358,7 +358,7 @@
       cards[i].classList.remove("playing");
       if (cards[i].fillEl) cards[i].fillEl.style.width = "0";
     }
-    if (mode === "song"){ displaySec = 0; ledSig = ""; renderLeds(); syncSongHeader(0, -1); }
+    if (mode === "song"){ displaySec = 0; ledSig = ""; renderLeds(); syncSongHeader(0); }
     releaseWakeLock();
     armIdle();
   }
@@ -674,7 +674,7 @@
       $("songTitle").value = song.title;
       $("loopBtn").setAttribute("aria-checked", String(song.loop));
       displaySec = 0; ledSig = "";
-      saveSong(); renderSections(); updateTotal(); renderLeds(); syncSongHeader(0, -1);
+      saveSong(); renderSections(); updateTotal(); renderLeds(); syncSongHeader(0);
       markFavs();
     }
   }
@@ -903,7 +903,7 @@
         if (cursor.sec >= song.sections.length){ cursor.sec = 0; cursor.bar = 0; }
         if (displaySec >= song.sections.length) displaySec = song.sections.length - 1;
         ledSig = "";
-        saveSong(); renderSections(); renderLeds(); syncSongHeader(displaySec, -1); updateTotal();
+        saveSong(); renderSections(); renderLeds(); syncSongHeader(displaySec); updateTotal();
       });
       var name = document.createElement("input");
       name.className = "sec-name"; name.value = s.name; name.maxLength = 10;
@@ -953,7 +953,7 @@
       bpmIn.addEventListener("blur", function(){
         s.bpm = clampInt(bpmIn.value, MIN_BPM, MAX_BPM, s.bpm);
         bpmIn.value = s.bpm; updateTotal(); saveSong();
-        if (displaySec === i && !state.running) syncSongHeader(i, -1);
+        if (displaySec === i && !state.running) syncSongHeader(i);
       });
       var l3 = document.createElement("span"); l3.textContent = "BPM";
       f3.appendChild(bpmIn); f3.appendChild(l3);
@@ -970,7 +970,7 @@
       card.addEventListener("click", function(e){
         if (e.target.closest("input,select,button")) return;
         if (state.running) return;
-        displaySec = i; ledSig = ""; renderLeds(); syncSongHeader(i, -1);
+        displaySec = i; ledSig = ""; renderLeds(); syncSongHeader(i);
       });
       list.appendChild(card);
     });
@@ -988,13 +988,11 @@
       + "마디 · " + m + "분 " + sec + "초";
   }
 
-  function syncSongHeader(i, bar){
+  // 구간 이름과 박자는 아래 목록에 이미 적혀 있어, 헤더는 BPM 만 따라갑니다.
+  function syncSongHeader(i){
     var s = song.sections[i];
     if (!s) return;
     $("bpmInput").value = s.bpm;
-    $("caption").textContent = bar >= 0
-      ? s.name + " · " + s.meter + " · " + (bar+1) + "/" + s.bars + "마디"
-      : s.name + " · " + s.meter + " · " + s.bars + "마디";
   }
 
   $("songTitle").addEventListener("input", function(){
@@ -1036,6 +1034,7 @@
     $("tempoRow").hidden = !basic;
     $("picksRow").hidden = !basic;
     input.readOnly = !basic;
+    $("caption").hidden = !basic;
     $("favHint").textContent = HINTS[m];
     $("favHint").classList.remove("say");
     ledSig = "";
@@ -1045,7 +1044,7 @@
     } else {
       displaySec = 0;
       $("songTitle").value = song.title || "";
-      renderSections(); updateTotal(); syncSongHeader(0, -1);
+      renderSections(); updateTotal(); syncSongHeader(0);
     }
     renderFavs();
     renderLeds();
@@ -1105,7 +1104,7 @@
         if (bar === 0) cards[i].scrollIntoView({ block:"nearest", behavior:"smooth" });
       } else fill.style.width = "0";
     }
-    syncSongHeader(si, bar);
+    syncSongHeader(si);
   }
 
 

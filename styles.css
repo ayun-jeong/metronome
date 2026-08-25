@@ -180,6 +180,7 @@
     caret-color:var(--tint)}
   #bpmInput:focus{color:var(--tint)}
   .cap{text-align:center;font-size:15px;color:var(--ink-2);margin-top:7px}
+  .cap[hidden]{display:none}
 
   /* ============ wheel ============ */
   .wheelwrap{position:relative;height:clamp(26px,3.4vh,34px);margin:clamp(6px,1.8vh,22px) -6px 0}
@@ -199,7 +200,7 @@
   /* 두 모드가 함께 쓰는 한 줄이라 pane 바깥에 있습니다. 위 여백은 예전에 pane 의
      margin-top 과 합쳐져 나오던 값을 그대로 합쳐 둔 것입니다. */
   .favwrap{flex:0 0 auto;background:var(--panel);border-radius:18px;padding:8px 8px 5px;
-    margin-top:clamp(14px,3.4vh,40px)}
+    margin-top:clamp(10px,2.2vh,26px)}
   .favs{display:flex;gap:6px}
   .fav{flex:1 1 0;min-width:0;min-height:clamp(40px,5.6vh,52px);border-radius:13px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -268,8 +269,8 @@
   .pane{display:flex;flex-direction:column;min-height:0;flex:1 1 auto;gap:9px;
     margin-top:clamp(6px,1.2vh,12px)}
   .pane[hidden]{display:none}
-  .songhead{display:flex;flex-direction:column;gap:2px;padding:0 4px}
-  .songrow{display:flex;align-items:center;gap:8px}
+  .songhead{flex:0 0 auto;padding:0 4px}
+  .songrow{display:flex;align-items:baseline;gap:8px}
   .songrow input{flex:1 1 auto;min-width:0;font-family:inherit;font-size:19px;font-weight:700;
     color:var(--ink);background:transparent;border:0;outline:0;padding:0;letter-spacing:-.03em}
   .songrow input::placeholder{color:var(--ink-3);font-weight:600}
@@ -281,11 +282,13 @@
     stroke-linecap:round;stroke-linejoin:round}
   .hbtn[aria-checked="true"]{background:var(--tint-soft)}
   .hbtn[aria-checked="true"] svg{stroke:var(--tint)}
-  .total{font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:1px}
-  /* 세 줄이 들어가는 높이를 기본으로 고정합니다. 구간이 늘어도 줄이 얇아지지 않고
-     목록 안에서 스크롤됩니다. */
-  .sec-list{flex:0 0 auto;height:clamp(150px,24vh,196px);
+  /* 곡 이름 옆에 붙습니다. 이름이 길면 이름 쪽이 먼저 줄어듭니다. */
+  .total{flex:0 0 auto;font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;
+    white-space:nowrap;padding-top:2px}
+  /* 세 줄이 들어가는 높이를 기본으로 잡습니다. 구간이 늘어도 줄이 얇아지지 않고
+     목록 안에서 스크롤됩니다. 다만 화면이 모자라면 목록이 먼저 양보해야 합니다 —
+     고정 높이로 두면 아래 재생 버튼 위로 흘러넘칩니다. */
+  .sec-list{flex:0 1 auto;min-height:0;height:clamp(150px,24vh,196px);
     overflow-y:auto;display:flex;flex-direction:column;gap:8px;
     -webkit-overflow-scrolling:touch;margin:0 -14px;padding:2px 14px 16px;
     scrollbar-width:none}
