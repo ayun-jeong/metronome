@@ -116,12 +116,12 @@
 
   .app{position:relative;z-index:1;width:100%;max-width:430px;margin:0 auto;
     height:100dvh;display:flex;flex-direction:column;
-    padding:clamp(10px,1.6vh,18px) 18px 0;overflow:hidden}
+    padding:clamp(8px,1.2vh,14px) 18px 0;overflow:hidden}
   .app > *{flex:0 0 auto}
 
   /* ============ head ============ */
   .head{display:flex;align-items:center;gap:9px;
-    padding-bottom:clamp(10px,2.6vh,36px)}
+    padding-bottom:clamp(8px,2.2vh,28px)}
   .mark{flex:1;font-size:15px;font-weight:700;letter-spacing:.15em;color:var(--mark)}
   .ico{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
     display:flex;align-items:center;justify-content:center;
@@ -132,8 +132,8 @@
 
   /* ============ beat bars ============ */
   /* 배경칸 없이 배경 위에 그대로 — 여백만 담당합니다 */
-  .beatwrap{padding:0 2px;margin-bottom:clamp(12px,2.8vh,38px)}
-  .leds{display:flex;gap:7px;align-items:flex-end;height:clamp(54px,13.4vh,168px)}
+  .beatwrap{padding:0 2px;margin-bottom:clamp(10px,2.4vh,32px)}
+  .leds{display:flex;gap:7px;align-items:flex-end;height:clamp(52px,12.8vh,160px)}
   .led{flex:1 1 0;min-width:0;height:100%;background:transparent;
     display:flex;align-items:flex-end}
   .led i{display:block;width:100%;border-radius:9px;background:var(--bar);
@@ -161,10 +161,10 @@
     background:transparent;border:0;outline:0;width:3ch;text-align:center;padding:0;margin:0;
     caret-color:var(--tint)}
   #bpmInput:focus{color:var(--tint)}
-  .cap{text-align:center;font-size:15px;color:var(--ink-2);margin-top:9px}
+  .cap{text-align:center;font-size:15px;color:var(--ink-2);margin-top:7px}
 
   /* ============ wheel ============ */
-  .wheelwrap{position:relative;height:clamp(28px,4vh,38px);margin:clamp(8px,2vh,28px) -6px 0}
+  .wheelwrap{position:relative;height:clamp(26px,3.4vh,34px);margin:clamp(6px,1.8vh,22px) -6px 0}
   .wheelwrap[hidden]{display:none}
   .wheel{position:absolute;inset:0;cursor:grab;touch-action:none;user-select:none;
     -webkit-user-select:none;
@@ -179,7 +179,7 @@
 
   /* ============ favourites ============ */
   .favwrap{flex:0 0 auto;background:var(--panel);border-radius:18px;padding:8px 8px 5px;
-    margin-top:clamp(10px,2.6vh,34px)}
+    margin-top:clamp(8px,2.2vh,28px)}
   .favs{display:flex;gap:6px}
   .fav{flex:1 1 0;min-width:0;min-height:clamp(40px,5.6vh,52px);border-radius:13px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -202,7 +202,7 @@
   .favhint.say{color:var(--tint)}
 
   /* ============ the three controls — five candidates ============ */
-  .picks{flex:0 0 auto;display:flex;margin-top:clamp(10px,2.6vh,34px)}
+  .picks{flex:0 0 auto;display:flex;margin-top:clamp(8px,2.2vh,28px)}
   .picks[hidden]{display:none}
   .pick{flex:1 1 0;min-width:0;position:relative;
     min-height:clamp(46px,6.4vh,58px);
@@ -242,11 +242,11 @@
   /* 남는 높이를 위아래로 나눠 갖습니다. 위를 더 크게 잡아 내용이 아래로 내려앉습니다.
      곡 모드에서는 구간 목록이 공간을 써야 하므로 접습니다. */
   /* 두 모드에서 스틱과 BPM 이 같은 자리에 오도록 위쪽은 고정, 남는 높이는 아래가 흡수 */
-  .topgap{flex:0 0 auto;height:clamp(10px,3vh,40px)}
+  .topgap{flex:0 0 auto;height:clamp(8px,2.4vh,30px)}
 
   /* ============ song pane ============ */
   .pane{display:flex;flex-direction:column;min-height:0;flex:1 1 auto;gap:9px;
-    margin-top:clamp(8px,1.6vh,16px)}
+    margin-top:clamp(6px,1.2vh,12px)}
   .pane[hidden]{display:none}
   .songhead{display:flex;flex-direction:column;gap:2px;padding:0 4px}
   .songrow{display:flex;align-items:center;gap:8px}
@@ -397,8 +397,9 @@
     /* 원은 세로를 많이 먹으므로 이 크기에서만 여섯 안 모두 한 단계 줄입니다 */
     .foot .play{width:56px;height:56px}
     .foot .play svg{width:20px}
-    /* 4인치대에서는 세 줄이 들어가지 않으므로 두 줄만 보이고 나머지는 스크롤합니다 */
-    .sec-list{height:130px}
+    /* 4인치대에서는 세 줄이 들어가지 않으므로 두 줄만 보이고 나머지는 스크롤합니다.
+       상태 표시줄까지 빠지면 더 좁아지므로 한 줄 반 높이로 잡습니다 */
+    .sec-list{height:114px}
   }
 
   @media (prefers-reduced-motion: reduce){ *{transition-duration:.01ms !important} }

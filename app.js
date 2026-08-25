@@ -382,7 +382,7 @@
 
   // ---------- tempo ----------
   function syncCaption(){
-    $("caption").textContent = "BPM · " + tempoName(state.bpm);
+    $("caption").textContent = tempoName(state.bpm);
     markFavs();
   }
   function setBpm(v, fromInput){
