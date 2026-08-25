@@ -23,82 +23,68 @@
 
 <div class="app">
 
-  <div class="toprow">
-    <div class="seg glass" role="group" aria-label="모드">
-      <button id="modeBasic" aria-pressed="true">연습</button>
-      <button id="modeSong"  aria-pressed="false">곡</button>
-    </div>
-    <button class="iconbtn glass" id="themeBtn" aria-label="다크모드로 전환">
+  <div class="head">
+    <span class="mark">METRON</span>
+    <span id="headSlot"></span>
+    <button class="ico" id="themeBtn" aria-label="다크모드로 전환">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path id="themeIcon" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
     </button>
-    <button class="star glass" id="starBtn" aria-pressed="false" aria-label="즐겨찾기에 저장">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <button class="ico" id="searchBtn" aria-label="코드 검색">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     </button>
   </div>
 
-  <div class="hero">
+  <div class="topgap" id="topGap"></div>
+  <div class="beatwrap">
     <div class="leds" id="leds" role="group" aria-label="마디 강세"></div>
-
-    <div class="readout">
-      <div class="bpm-line">
-        <button class="nudge soft" id="m1" aria-label="1 감소">
-          <svg viewBox="0 0 19 19" aria-hidden="true"><path d="M3.5 9.5h12"/></svg>
-        </button>
-        <input id="bpmInput" type="text" inputmode="numeric" pattern="[0-9]*"
-               maxlength="3" value="96" aria-label="템포 BPM">
-        <button class="nudge soft" id="p1" aria-label="1 증가">
-          <svg viewBox="0 0 19 19" aria-hidden="true"><path d="M9.5 3.5v12M3.5 9.5h12"/></svg>
-        </button>
-      </div>
-      <div class="caption" id="caption">BPM · Andante</div>
-    </div>
-
-    <div class="tempo-row" id="tempoRow">
-      <div class="wheel-wrap">
-        <div class="wheel" id="wheel" role="slider" tabindex="0"
-             aria-label="템포 휠" aria-valuemin="20" aria-valuemax="300" aria-valuenow="96"></div>
-        <div class="wheel-mark"></div>
-      </div>
-    </div>
   </div>
 
-  <div class="picks glass" id="picksRow">
-    <div class="pick">
-      <span class="big" id="meterVal">4/4</span>
-      <select id="meterSel" aria-label="박자표"></select>
-    </div>
-    <div class="pick">
-      <span class="big note" id="subVal" role="img" aria-label="4분음표"></span>
-      <select id="subSel" aria-label="분할"></select>
-    </div>
-    <button class="pick" id="tapBtn">
-      <span class="big ico">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"/></svg>
-      </span>
+  <div class="read">
+    <button class="nudge" id="m1" aria-label="1 감소">
+      <svg viewBox="0 0 19 19" aria-hidden="true"><path d="M3.5 9.5h12"/></svg>
+    </button>
+    <input id="bpmInput" type="text" inputmode="numeric" pattern="[0-9]*"
+           maxlength="3" value="96" aria-label="템포 BPM">
+    <button class="nudge" id="p1" aria-label="1 증가">
+      <svg viewBox="0 0 19 19" aria-hidden="true"><path d="M9.5 3.5v12M3.5 9.5h12"/></svg>
     </button>
   </div>
+  <div class="cap" id="caption">BPM · Andante moderato</div>
 
-  <div class="favwrap">
-    <div class="favs" id="favs" role="group" aria-label="즐겨찾기"></div>
-    <div class="favhint" id="favHint">별표를 눌러 현재 템포를 저장하세요</div>
+  <div class="wheelwrap" id="tempoRow">
+    <div class="wheel" id="wheel" role="slider" tabindex="0"
+         aria-label="템포 휠" aria-valuemin="20" aria-valuemax="300" aria-valuenow="96"></div>
+    <div class="wheel-mark"></div>
   </div>
 
-  <!-- ============ 연습 ============ -->
+
+
   <div class="pane" id="basicPane">
-    <div class="chord glass">
-      <div class="chord-in" id="chordIn">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="chordQ" type="text" autocomplete="off" autocapitalize="off"
-               spellcheck="false" placeholder="코드 검색" aria-label="코드 검색">
-        <button class="chord-clear" id="chordClear" aria-label="지우기">&times;</button>
-      </div>
-      <div class="chord-sug" id="chordSug"></div>
-      <div class="chord-out" id="chordOut"></div>
+  <div class="favwrap">
+      <div class="favs" id="favs" role="group" aria-label="즐겨찾기"></div>
+      <div class="favhint" id="favHint">빈 칸을 눌러 저장 · 두 번 눌러 지움</div>
     </div>
-
+    <div class="picks" id="picksRow">
+      <div class="pick">
+        <span class="lab">박자표</span>
+        <span class="big" id="meterVal">4/4</span>
+        <select id="meterSel" aria-label="박자표"></select>
+      </div>
+      <div class="pick">
+        <span class="lab">분할</span>
+        <span class="big note" id="subVal" role="img" aria-label="4분음표"></span>
+        <select id="subSel" aria-label="분할"></select>
+      </div>
+      <button class="pick" id="tapBtn">
+        <span class="lab">탭</span>
+        <span class="big ico2">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"/></svg>
+        </span>
+      </button>
+    </div>
+    <div class="spacer sp-b"></div>
   </div>
 
-  <!-- ============ 곡 ============ -->
   <div class="pane" id="songPane" hidden>
     <div class="songhead">
       <div class="songrow">
@@ -112,17 +98,40 @@
       </div>
       <div class="total" id="totalTime">—</div>
     </div>
-    <div class="sec-list" id="secList"></div>  </div>
+    <div class="sec-list" id="secList"></div>
+    <div class="spacer"></div>
+  </div>
 
-
-  <div class="playwrap">
+  <div class="foot" id="foot">
+    <div class="modes" id="modesRow" role="group" aria-label="모드">
+      <button id="modeBasic" aria-pressed="true">연습</button>
+      <span class="gap"></span>
+      <button id="modeSong" aria-pressed="false">곡</button>
+    </div>
     <button class="play" id="playBtn" aria-label="시작">
       <span class="badge"><svg viewBox="0 0 13 15" aria-hidden="true"><path id="playPath" d="M1.5 1 L12 7.5 L1.5 14 Z"/></svg></span>
       <span id="playLabel" class="sr">시작</span>
     </button>
   </div>
-
 </div>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-top">
+    <b>코드 검색</b>
+    <button class="ico" id="sheetClose" aria-label="닫기">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="chord-in" id="chordIn">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <input id="chordQ" type="text" autocomplete="off" autocapitalize="off"
+           spellcheck="false" placeholder="코드 검색" aria-label="코드 검색">
+    <button class="chord-clear" id="chordClear" aria-label="지우기">&times;</button>
+  </div>
+  <div class="chord-sug" id="chordSug"></div>
+  <div class="chord-out" id="chordOut"></div>
+</div>
+<div class="scrim" id="sheetBack"></div>
 
 <script src="chords.js"></script>
 <script src="app.js"></script>

@@ -1,7 +1,7 @@
 // Stale-while-revalidate: the app opens instantly from cache and quietly updates
 // in the background, so a plain refresh is enough to pick up changes. No version
 // bumping needed for edits to the files below.
-const CACHE = "metron-v1";
+const CACHE = "metron-v2";
 const SHELL = [
   "./", "./index.html", "./styles.css", "./chords.js", "./app.js",
   "./manifest.webmanifest",

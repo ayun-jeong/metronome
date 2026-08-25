@@ -3,7 +3,7 @@
 
   var AudioCtx = window.AudioContext || window.webkitAudioContext;
   var $ = function(id){ return document.getElementById(id); };
-  var MIN_BPM = 20, MAX_BPM = 300, MAX_BARS = 999, FAV_SLOTS = 6;
+  var MIN_BPM = 20, MAX_BPM = 300, MAX_BARS = 999, FAV_SLOTS = 6, MAX_SECTIONS = 60;
 
   // accent levels: 3 강 / 2 중 / 1 약 / 0 쉼
   // Compound meters keep their real grouping — 6/8 is two dotted-quarter groups,
@@ -94,6 +94,30 @@
         accents:meterBy("4/4").acc.slice() }
     ] };
   }
+  // 저장본은 언제든 옛 형식이거나 손상돼 있을 수 있습니다. 믿지 않고 한 번 거릅니다.
+  // accents 가 빠진 구간 하나면 예전에는 앱 전체가 멈췄습니다.
+  function fixSection(s, i){
+    if (!s || typeof s !== "object") s = {};
+    var m = meterBy(s.meter);
+    var ok = s.accents && s.accents.length === m.acc.length;
+    return {
+      name: (typeof s.name === "string" && s.name) ? s.name.slice(0,10) : autoName(i),
+      bars: clampInt(s.bars, 1, MAX_BARS, 8),
+      meter: m.label,
+      bpm: clampInt(s.bpm, MIN_BPM, MAX_BPM, 100),
+      subdiv: 1,
+      accents: ok ? s.accents.map(function(a){ return clampInt(a, 0, 3, 0); }) : m.acc.slice()
+    };
+  }
+  function fixSong(x){
+    if (!x || !x.sections || !x.sections.length) return blankSong();
+    return {
+      title: typeof x.title === "string" ? x.title : "",
+      loop: x.loop !== false,
+      sections: x.sections.slice(0, MAX_SECTIONS).map(fixSection)
+    };
+  }
+
   var song = blankSong();
   try {
     var sv = localStorage.getItem("metron.song");
@@ -108,17 +132,26 @@
           if (sd.name !== w[0] || sd.bars !== w[1] || sd.meter !== w[2] || sd.bpm !== w[3])
             isDemo = false;
         }
-        if (!isDemo){
-          song = ps;
-          if (typeof song.title !== "string") song.title = "";
-        }
+        if (!isDemo) song = fixSong(ps);
       }
     }
   } catch(e){}
-  function saveSong(){
+  // 구간 칸에 한 글자 칠 때마다 디스크에 쓰지 않고 모아서 한 번 씁니다.
+  // 화면을 덮거나 앱을 떠날 때는 즉시 밀어 넣습니다.
+  var songTimer = null;
+  function flushSong(){
+    if (!songTimer) return;
+    clearTimeout(songTimer); songTimer = null;
     try{ localStorage.setItem("metron.song", JSON.stringify(song)); }catch(e){}
-    if (mode === "song") markFavs();
   }
+  function saveSong(){
+    if (mode === "song") markFavs();
+    if (songTimer) clearTimeout(songTimer);
+    songTimer = setTimeout(function(){ songTimer = null;
+      try{ localStorage.setItem("metron.song", JSON.stringify(song)); }catch(e){}
+    }, 250);
+  }
+  window.addEventListener("pagehide", flushSong);
 
   // ---------- audio ----------
   var ctx=null, bus=null, limiter=null, noiseBuf=null, timerId=null;
@@ -209,11 +242,19 @@
   }
 
   // Practice mode is a song of one endless section, so the transport has one code path.
+  // 연습 모드는 끝없는 한 구간짜리 곡입니다. 매번 새로 만들지 않고 한 개를 고쳐 씁니다 —
+  // 이 함수는 음 하나 예약할 때마다 세 번 불립니다.
+  var BASIC_SEC = { bars:Infinity, bpm:96, subdiv:1, accents:null, meter:"4/4" };
   function secAt(i){
-    if (mode === "basic")
-      return { bars:Infinity, bpm:state.bpm, subdiv:state.subdiv,
-               accents:state.accents, meter:state.meter.label };
-    return song.sections[i];
+    if (mode === "basic"){
+      BASIC_SEC.bpm = state.bpm;
+      BASIC_SEC.subdiv = state.subdiv;
+      BASIC_SEC.accents = state.accents;
+      BASIC_SEC.meter = state.meter.label;
+      return BASIC_SEC;
+    }
+    // 재생 중에 구간을 지우면 커서가 목록 밖을 가리킬 수 있습니다
+    return song.sections[i] || song.sections[0];
   }
   function curSec(){ return secAt(cursor.sec); }
   function secCount(){ return mode === "basic" ? 1 : song.sections.length; }
@@ -279,7 +320,26 @@
       $("playBtn").classList.add("running");
       requestWakeLock();
     };
-    if (ctx.state === "suspended") ctx.resume().then(go).catch(go); else go();
+    clearTimeout(idleTimer); idleTimer = null;
+    if (ctx.state !== "suspended"){ go(); return; }
+    // resume() 이 끝내 답하지 않는 환경이 있습니다. 약속만 믿으면 재생 버튼이
+    // 영영 켜지지 않으므로, 짧은 시간 뒤에는 그냥 시작합니다.
+    var fired = false;
+    var fire = function(){ if (!fired){ fired = true; go(); } };
+    try { ctx.resume().then(fire, fire); } catch(e){ fire(); }
+    setTimeout(fire, 250);
+  }
+
+  // 멈춰 있는 동안에도 살아 있는 AudioContext 는 오디오 장치를 붙잡아 둡니다.
+  // 마지막 클릭의 꼬리가 끝난 뒤 재워 두고, 다시 누르면 start() 가 깨웁니다.
+  var idleTimer = null;
+  function armIdle(){
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function(){
+      idleTimer = null;
+      if (!state.running && ctx && ctx.state === "running")
+        ctx.suspend().catch(function(){});
+    }, 2500);
   }
 
   function stop(){
@@ -296,10 +356,11 @@
     var cards = $("secList").children;
     for (i=0;i<cards.length;i++){
       cards[i].classList.remove("playing");
-      cards[i].querySelector(".sec-prog i").style.width = "0";
+      if (cards[i].fillEl) cards[i].fillEl.style.width = "0";
     }
     if (mode === "song"){ displaySec = 0; ledSig = ""; renderLeds(); syncSongHeader(0, -1); }
     releaseWakeLock();
+    armIdle();
   }
 
   function toggle(){ state.running ? stop() : start(); }
@@ -312,7 +373,11 @@
   document.addEventListener("visibilitychange", function(){
     var hidden = document.visibilityState === "hidden";
     scheduleAhead = hidden ? AHEAD_BG : AHEAD_FG;
+    // 타이머가 느려지기 전에 넓은 창을 한 번 채워둡니다. 다음 호출을 기다리면
+    // 그 사이에 만기가 된 박은 이미 놓친 뒤입니다.
+    if (hidden && state.running) scheduler();
     if (!hidden && state.running) requestWakeLock();
+    if (hidden) flushSong();
   });
 
   // ---------- tempo ----------
@@ -367,6 +432,9 @@
   wheel.addEventListener("pointermove", function(e){
     if (!dragging) return;
     var dx = e.clientX - lastX; lastX = e.clientX;
+    // 오른쪽으로 끌면 숫자가 내려갑니다. 이미 한계면 눈금도 움직이지 않아야
+    // 숫자와 눈금이 어긋나 보이지 않습니다.
+    if ((dx > 0 && state.bpm <= MIN_BPM) || (dx < 0 && state.bpm >= MAX_BPM)) return;
     // The scale strip slides under a fixed marker: drag it right and the marker
     // lands on a lower number, exactly like the printed scale on a real metronome.
     wheelPx += dx; wheelAcc -= dx;
@@ -465,6 +533,9 @@
   function setActiveBeat(i){
     var l = $("leds").children;
     for (var k=0;k<l.length;k++) l[k].classList.toggle("on", k === i);
+    // 애니메이션을 다시 태우려면 리플로우가 한 번 필요합니다
+    var pb = $("playBtn");
+    pb.classList.remove("hit"); void pb.offsetWidth; pb.classList.add("hit");
   }
 
   // ---------- meter / subdivision pickers ----------
@@ -558,8 +629,8 @@
   })();
 
   var HINTS = {
-    basic:"별표를 눌러 현재 템포를 저장하세요",
-    song:"별표를 눌러 지금 곡을 저장하세요"
+    basic:"빈 칸을 눌러 저장 · 두 번 눌러 지움",
+    song:"빈 칸을 눌러 저장 · 두 번 눌러 지움"
   };
   var hintTimer = null;
   function say(msg){
@@ -599,16 +670,7 @@
       $("wheel").setAttribute("aria-valuenow", f.bpm);
       ledSig = ""; renderLeds(); syncCaption();
     } else {
-      song = {
-        title:f.title || "",
-        loop:!!f.loop,
-        sections:f.sections.map(function(s){
-          var m = meterBy(s.meter);
-          return { name:s.name, bars:s.bars, meter:s.meter, bpm:s.bpm, subdiv:s.subdiv||1,
-                   accents:(s.accents && s.accents.length === m.acc.length)
-                     ? s.accents.slice() : m.acc.slice() };
-        })
-      };
+      song = fixSong(f);
       $("songTitle").value = song.title;
       $("loopBtn").setAttribute("aria-checked", String(song.loop));
       displaySec = 0; ledSig = "";
@@ -635,21 +697,6 @@
     return true;
   }
 
-  function toggleStar(){
-    var list = activeFavs();
-    var i = favIndexOfCurrent();
-    if (i >= 0){
-      list[i] = null;
-      persistFavs(); renderFavs();
-      say("즐겨찾기에서 뺐습니다");
-      return;
-    }
-    var slot = list.indexOf(null);
-    if (slot < 0){ say("6칸이 모두 찼습니다. 지울 칸을 먼저 눌러보세요"); return; }
-    writeFav(slot);
-    say("즐겨찾기에 저장했습니다");
-  }
-  $("starBtn").addEventListener("click", toggleStar);
 
   // Light and dark follow the system until you press the button; after that your
   // choice is remembered and wins over the system setting.
@@ -683,7 +730,6 @@
     var list = activeFavs(), kids = $("favs").children, k = curKey();
     for (var i=0;i<kids.length;i++)
       kids[i].setAttribute("aria-pressed", String(keyOf(list[i]) === k));
-    $("starBtn").setAttribute("aria-pressed", String(favIndexOfCurrent() >= 0));
   }
 
   var EMPTY_STAR = '<svg viewBox="0 0 24 24" aria-hidden="true">'
@@ -699,7 +745,7 @@
         b.className = "fav " + (f ? "soft" : "empty");
         if (f && mode === "basic"){
           b.innerHTML = '<span class="n">' + f.bpm + '</span><span class="m">' + f.meter + '</span>';
-          b.setAttribute("aria-label", f.bpm + " BPM " + f.meter + " 즐겨찾기");
+          b.setAttribute("aria-label", f.bpm + " BPM " + f.meter + " 즐겨찾기, 다시 누르면 지움");
         } else if (f){
           var title = f.title || "이름 없음";
           b.innerHTML = '<span class="t"></span><span class="m">'
@@ -713,14 +759,22 @@
         }
         b.setAttribute("aria-pressed", String(keyOf(f) === k));
         b.addEventListener("click", function(){
-          if (activeFavs()[i]) applyFav(i);
-          else if (writeFav(i)) say("즐겨찾기에 저장했습니다");
-          else say(mode === "basic" ? "이미 저장된 템포입니다" : "이미 저장된 곡입니다");
+          var list = activeFavs();
+          if (!list[i]){
+            if (writeFav(i)) say("즐겨찾기에 저장했습니다");
+            else say(mode === "basic" ? "이미 저장된 템포입니다" : "이미 저장된 곡입니다");
+            return;
+          }
+          // Tapping the one already loaded clears it. The old layout used the star
+          // button for this; without the star the slot has to carry both actions.
+          if (favIndexOfCurrent() === i){
+            list[i] = null; persistFavs(); renderFavs();
+            say("즐겨찾기에서 지웠습니다");
+          } else applyFav(i);
         });
         box.appendChild(b);
       })(i);
     }
-    $("starBtn").setAttribute("aria-pressed", String(favIndexOfCurrent() >= 0));
   }
 
 
@@ -846,6 +900,7 @@
         if (song.sections.length <= 1) return;
         song.sections.splice(i, 1);
         renumberSections();
+        if (cursor.sec >= song.sections.length){ cursor.sec = 0; cursor.bar = 0; }
         if (displaySec >= song.sections.length) displaySec = song.sections.length - 1;
         ledSig = "";
         saveSong(); renderSections(); renderLeds(); syncSongHeader(displaySec, -1); updateTotal();
@@ -905,7 +960,9 @@
 
       var prog = document.createElement("div");
       prog.className = "sec-prog";
-      prog.appendChild(document.createElement("i"));
+      var fill = document.createElement("i");
+      prog.appendChild(fill);
+      card.fillEl = fill;   // 박마다 찾지 않도록 만들 때 잡아 둡니다
 
       card.appendChild(del); card.appendChild(name);
       card.appendChild(f1); card.appendChild(f2); card.appendChild(f3);
@@ -1041,7 +1098,8 @@
     for (var i=0;i<cards.length;i++){
       var on = (i === si);
       cards[i].classList.toggle("playing", on);
-      var fill = cards[i].querySelector(".sec-prog i");
+      var fill = cards[i].fillEl;
+      if (!fill) continue;
       if (on){
         fill.style.width = ((bar+1) / song.sections[i].bars * 100).toFixed(1) + "%";
         if (bar === 0) cards[i].scrollIntoView({ block:"nearest", behavior:"smooth" });
@@ -1064,6 +1122,25 @@
       localStorage.removeItem("maelzel." + k);
     });
   } catch(e){}
+
+  // ---------- search sheet ----------
+  function openSearch(){
+    $("sheet").classList.add("open");
+    setTimeout(function(){ $("chordQ").focus(); }, 180);
+  }
+  function closeSearch(){
+    $("sheet").classList.remove("open");
+    $("chordQ").blur();
+  }
+  $("searchBtn").addEventListener("click", openSearch);
+  $("sheetClose").addEventListener("click", closeSearch);
+  $("sheetBack").addEventListener("click", closeSearch);
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && $("sheet").classList.contains("open")) closeSearch();
+  });
+
+  // 모드 전환은 늘 상단 슬롯에 둡니다
+  $("headSlot").appendChild($("modesRow"));
 
   // ---------- boot ----------
   $("loopBtn").setAttribute("aria-checked", String(song.loop));
