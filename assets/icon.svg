@@ -1,15 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <rect width="1024" height="1024" fill="#FFFFFF"/>
-  <g transform="translate(512 512) scale(1.0) translate(-512 -512)">
-    <g fill="#A9B4CD">
-      <rect x="163" y="353" width="174" height="286" rx="25"/>
-      <rect x="353" y="545" width="169" height="94" rx="25"/>
-      <rect x="537" y="443" width="169" height="196" rx="25"/>
-      <rect x="721" y="540" width="165" height="99" rx="25"/>
-    </g>
-    <g fill="none" stroke="#A9B4CD" stroke-width="21" stroke-linecap="round">
-      <path d="M 242.0 298.1 A 335 335 0 0 1 784.0 298.1"/>
-      <path d="M 784.0 691.9 A 335 335 0 0 1 242.0 691.9"/>
-    </g>
+<!-- Vector master for the app icons. The PNGs in this folder are rendered from
+     this geometry; see the icon note in README.md. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1059 1059" width="1059" height="1059">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1059" y2="1059" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ECF3FF"/>
+      <stop offset=".30" stop-color="#F1F6FF"/>
+      <stop offset=".52" stop-color="#FFFFFF"/>
+      <stop offset=".72" stop-color="#FCFBFF"/>
+      <stop offset="1" stop-color="#F4F2FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1059" height="1059" fill="url(#bg)"/>
+  <g fill="#8894B0">
+    <rect x="166" y="369" width="160" height="322" rx="28"/>
+    <rect x="355" y="578" width="160" height="113" rx="28"/>
+    <rect x="544" y="471" width="160" height="220" rx="28"/>
+    <rect x="733" y="578" width="160" height="113" rx="28"/>
+  </g>
+  <g fill="none" stroke="#A9B3CA" stroke-width="44" stroke-linecap="round">
+    <path d="M285.902 285.902 A344.5 344.5 0 0 1 869.758 475.608"/>
+    <path d="M773.098 773.098 A344.5 344.5 0 0 1 285.902 773.098"/>
   </g>
 </svg>
