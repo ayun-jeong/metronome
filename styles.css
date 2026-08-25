@@ -6,7 +6,11 @@
 
   /* ============ tokens — light is the base ============ */
   :root{
-    --bg:#E3E9F5;
+    --bg:#E7EEFA;
+    --blob-a:rgba(88,146,255,.72);
+    --blob-b:rgba(118,214,255,.62);
+    --blob-c:rgba(166,140,255,.54);
+    --blob-d:rgba(110,192,255,.58);
     --lift:rgba(255,255,255,.55);
     --panel:rgba(255,255,255,.34);
     --card:rgba(255,255,255,.72);
@@ -36,7 +40,11 @@
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#0B0E16;
+      --bg:#04060B;
+      --blob-a:rgba(42,94,214,.62);
+      --blob-b:rgba(30,128,190,.48);
+      --blob-c:rgba(96,78,196,.48);
+      --blob-d:rgba(28,104,178,.42);
       --lift:rgba(255,255,255,.055);
       --panel:rgba(255,255,255,.035);
       --card:rgba(30,36,50,.72);
@@ -66,7 +74,11 @@
     }
   }
   :root[data-theme="dark"]{
-    --bg:#0B0E16;
+    --bg:#04060B;
+    --blob-a:rgba(42,94,214,.62);
+    --blob-b:rgba(30,128,190,.48);
+    --blob-c:rgba(96,78,196,.48);
+    --blob-d:rgba(28,104,178,.42);
     --lift:rgba(255,255,255,.055);
     --panel:rgba(255,255,255,.035);
     --card:rgba(30,36,50,.72);
@@ -104,11 +116,17 @@
     -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
     overscroll-behavior:none;font-size:17px;line-height:1.32;letter-spacing:-.01em;
   }
+  /* 유리 너머로 비치는 색. 흐린 색 덩어리 다섯을 깔고 그 위의 반투명 판들이
+     이걸 머금습니다 — 판만 반투명하면 유리처럼 보이지 않습니다. */
   body::before{
-    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    content:"";position:fixed;inset:-15%;z-index:0;pointer-events:none;
     background:
-      radial-gradient(58% 34% at 20% 4%, var(--lift), transparent 70%),
-      radial-gradient(46% 28% at 92% 78%, var(--lift), transparent 72%);
+      radial-gradient(34% 26% at 16% 10%,  var(--blob-a), transparent 64%),
+      radial-gradient(30% 24% at 86% 6%,   var(--blob-b), transparent 64%),
+      radial-gradient(38% 28% at 80% 58%,  var(--blob-c), transparent 66%),
+      radial-gradient(32% 26% at 8% 80%,   var(--blob-d), transparent 64%),
+      radial-gradient(30% 24% at 50% 108%, var(--blob-b), transparent 64%);
+    filter:blur(46px);
   }
   button{font-family:inherit;border:0;cursor:pointer;color:var(--ink);padding:0;
     touch-action:manipulation;user-select:none;-webkit-user-select:none;letter-spacing:inherit}
