@@ -12,7 +12,7 @@
 터미널을 직접 쓰려면:
 
 ```sh
-cd ~/Desktop/coding/metronome
+cd ~/Desktop/coding/metron
 python3 -m http.server 8000
 ```
 

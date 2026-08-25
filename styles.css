@@ -196,8 +196,10 @@
     background:var(--tint);border-radius:2px;pointer-events:none}
 
   /* ============ favourites ============ */
+  /* 두 모드가 함께 쓰는 한 줄이라 pane 바깥에 있습니다. 위 여백은 예전에 pane 의
+     margin-top 과 합쳐져 나오던 값을 그대로 합쳐 둔 것입니다. */
   .favwrap{flex:0 0 auto;background:var(--panel);border-radius:18px;padding:8px 8px 5px;
-    margin-top:clamp(8px,2.2vh,28px)}
+    margin-top:clamp(14px,3.4vh,40px)}
   .favs{display:flex;gap:6px}
   .fav{flex:1 1 0;min-width:0;min-height:clamp(40px,5.6vh,52px);border-radius:13px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
